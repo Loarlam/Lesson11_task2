@@ -8,13 +8,21 @@ using System.Collections.Generic;
 
 namespace Task2
 {
-    class CarCollection<T>
+    interface ICarCollection<T>
+    {
+        int NumberOfCarsInTheList { get; }
+        string InformationAboutCarsList { get; }
+        void AddsCarsAndYearOfManufacture(T value1, T value2);
+        void RemoveCarsInfo();
+    }
+
+    class CarCollection<T> : ICarCollection<T>
     {
         List<string> _listOfCars = new List<string>();
 
-        public string this[int index] => _listOfCars[index+1];
+        public string this[int index] => _listOfCars[index-1];
 
-        public int NumberOfcarsInTheList => _listOfCars.Count;
+        public int NumberOfCarsInTheList => _listOfCars.Count;
 
         public string InformationAboutCarsList
         {
@@ -24,13 +32,12 @@ namespace Task2
 
                 for (int i = 0; i < _listOfCars.Count; i++)
                 {
-                    result += _listOfCars[i] + "\n";
+                    result += $"№{i+1} "+_listOfCars[i] + "\n";
                 }
 
                 return result;
             }
         }
-
 
         public void AddsCarsAndYearOfManufacture(T carName, T machineYear)
         {
@@ -57,8 +64,10 @@ namespace Task2
             carCollectionInstance.AddsCarsAndYearOfManufacture("Hyundai", Convert.ToString(2005));
             carCollectionInstance.AddsCarsAndYearOfManufacture("Nissan", Convert.ToString(1999));
 
-            Console.WriteLine($"Машин в парке: {carCollectionInstance.NumberOfcarsInTheList}");
-            Console.WriteLine(carCollectionInstance.InformationAboutCarsList);
+            Console.WriteLine($"Машин в парке: {carCollectionInstance.NumberOfCarsInTheList}");
+            Console.WriteLine($"\nСписок машин:\n{carCollectionInstance.InformationAboutCarsList}");
+            Console.Write("Номер интересующей машины: ");
+            Console.WriteLine($"{carCollectionInstance[Int32.Parse(Console.ReadLine())]}");
 
             Console.ReadKey();
         }
