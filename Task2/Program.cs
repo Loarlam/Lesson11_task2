@@ -10,6 +10,7 @@ namespace Task2
 {
     interface ICarCollection<T>
     {
+        string this[int index] { get; }
         int NumberOfCarsInTheList { get; }
         string InformationAboutCarsList { get; }
         void AddsCarsAndYearOfManufacture(T value1, T value2);
@@ -20,7 +21,15 @@ namespace Task2
     {
         List<string> _listOfCars = new List<string>();
 
-        public string this[int index] => _listOfCars[index-1];
+        public string this[int index]
+        {
+            get
+            {
+                string temporaryCar = _listOfCars[index - 1];
+                _listOfCars.RemoveAt(index - 1);
+                return temporaryCar;
+            }
+        }
 
         public int NumberOfCarsInTheList => _listOfCars.Count;
 
@@ -32,7 +41,7 @@ namespace Task2
 
                 for (int i = 0; i < _listOfCars.Count; i++)
                 {
-                    result += $"№{i+1} "+_listOfCars[i] + "\n";
+                    result += $"№{i + 1} " + _listOfCars[i] + "\n";
                 }
 
                 return result;
@@ -47,7 +56,7 @@ namespace Task2
 
         public void RemoveCarsInfo()
         {
-            _listOfCars = null;
+            _listOfCars.Clear();
         }
     }
 
@@ -66,8 +75,21 @@ namespace Task2
 
             Console.WriteLine($"Машин в парке: {carCollectionInstance.NumberOfCarsInTheList}");
             Console.WriteLine($"\nСписок машин:\n{carCollectionInstance.InformationAboutCarsList}");
-            Console.Write("Номер интересующей машины: ");
-            Console.WriteLine($"{carCollectionInstance[Int32.Parse(Console.ReadLine())]}");
+            Console.Write("Покупаю №");
+            Console.WriteLine($"Моя машина {carCollectionInstance[Int32.Parse(Console.ReadLine())]}");
+
+            Console.Write("\nКупить все машины?\n1 - да\n2 - нет, только выбранную\nОтвет = ");
+
+            switch (Int32.Parse(Console.ReadLine()))
+            {
+                case 1:
+                    carCollectionInstance.RemoveCarsInfo();
+                    Console.WriteLine($"\nВ парке осталось {carCollectionInstance.NumberOfCarsInTheList} машин");
+                    break;
+                case 2:
+                    Console.WriteLine($"\nВ парке осталось {carCollectionInstance.NumberOfCarsInTheList} машин");
+                    break;
+            }
 
             Console.ReadKey();
         }
